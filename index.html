@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<!-- References to external style CSS file -->
+	<title>Test Firestore & Chart Creation</title>
+	  <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="scripts/createCharts.js"></script>
+</head>
+<body>
+	<h1>Melbourne Transit Statistics Dashboard</h1>
+	
+	<form method="GET" action="index.html">
+	  <label for="dateInput">Specify Date:</label>
+	  <input type="date" id="dateInput" name="dateInput">
+	  <input type="submit">
+	</form>
+	
+	 <h2 id="dashboardHeader">Total Number of passengers</h2>
+	 <div id="totalPassengers_div"></div>
+	 <div id="busPassengersChart_div"></div>
+	
+	<script type="module">
+
+			
+		// Import the functions you need from the SDKs you need
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js";
+		import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-analytics.js";
+		import { getFirestore, collection, collectionGroup, getDocs } from 'https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js';
+		// TODO: Add SDKs for Firebase products that you want to use
+		// https://firebase.google.com/docs/web/setup#available-libraries
+
+		// Your web app's Firebase configuration
+		// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+		const firebaseConfig = {
+		  apiKey: "AIzaSyCybp4oCp5XjuweRElYDCzesH2BCgjoLJo",
+		  authDomain: "mt-transit-16ec5.firebaseapp.com",
+		  projectId: "mt-transit-16ec5",
+		  storageBucket: "mt-transit-16ec5.appspot.com",
+		  messagingSenderId: "903025642227",
+		  appId: "1:903025642227:web:ed49423a280acfbef84586",
+		  measurementId: "G-RMM3PX0CJ5"
+		};
+		
+		const urlParams = new URLSearchParams(window.location.search);
+	
+		try {
+			var dateSelection = urlParams.get('dateInput');
+		} catch (err) {
+			dateSelection = "";
+			console.log(err.message);
+		}
+		
+		//Keep the date selection displayed in the date input
+		document.getElementById("dateInput").value = dateSelection;
+	
+		//var dateSelection = document.getElementById("dateInput").value;
+		
+		// Initialize Firebase
+		const app = initializeApp(firebaseConfig);
+		const db = getFirestore(app);
+		async function getBuses(db) {
+		
+			console.log("SELECTION: "+ dateSelection);
+		
+			// If there is no date selected by the user then default to today's date
+			if(dateSelection == "" || dateSelection == null){
+				const d = new Date();
+				var year = d.getFullYear(),
+				month = (d.getMonth() + 1),
+				day = d.getDate();
+				
+				if(month.length < 2)
+					month = "0" + month;
+				if(day.length < 2)
+					day = "0" + day;
+				
+				const todaysDate = [year, month, day].join("-");
+				dateSelection = todaysDate;
+			} 
+			
+			// Create reference to the date collection 
+			const busesCol = collection(db, "BusOperation/dates/"+dateSelection);
+			const busesSnapshot = await getDocs(busesCol);		// Get document snapshots of date collection
+
+			// To select the element class details
+			const dat = document.querySelector(".details");
+			
+			// Create data rows that will get the data for the charts
+			var capDataRows = [['Name', 'Capacity']];
+
+			var buses = [];
+			
+			var totalBuses = 0;
+			var avgPassengers = 0;
+			var totalPassengers = 0;
+		
+			// For each bus in the buses snapshot
+			busesSnapshot.forEach(async doc => {
+				buses.push(doc.id);
+
+				totalBuses++;
+				console.log(doc.id);
+			})
+			
+			console.log(buses);
+			console.log("TOTAL BUSES: " + totalBuses);
+
+			var psngrDataRows = [['Name', 'AvgPassengers']];	
+			
+			// EXAMPLE OF BEING ABLE TO ACCESS INDIVIDUAL BUSES FOR A SPECIFIC DATE AND ACCESS THE BUSES DATA
+			// Create reference to the arrival time collection in each bus document
+			
+			var itemsProcessed = 0;
+			if(buses.length > 0){
+				buses.forEach(async id => {
+					var totalPassengersPerBus = 0;
+					itemsProcessed++;
+					
+					const busArrivalRouteCol = collection(db, "BusOperation/dates/"+dateSelection+"/"+id+"/PassengerCount");
+					const busPassengerCountSnapshot = await getDocs(busArrivalRouteCol);		// Get document snapshots of ArrivalTime collection
+					
+					busPassengerCountSnapshot.forEach(async doc => {
+						totalPassengers += doc.data().count;
+						totalPassengersPerBus += doc.data().count;
+					})
+				
+					//totalPassengersPerBus = totalPassengers;
+					
+					if(itemsProcessed == buses.length){
+						avgPassengers = Math.round(totalPassengersPerBus / totalBuses);
+						psngrDataRows.push([id, avgPassengers])
+					
+						console.log("TOTAL PASSENGERS FOR "+id+": " + totalPassengersPerBus);
+						console.log("AVERAGE PASSENGERS PER BUS: " + avgPassengers);
+
+						document.getElementById("totalPassengers_div").innerHTML = totalPassengers + " Passengers have used Melbourne Transit";
+						// Call createFunction in createCharts.js 
+						createCharts(dateSelection, psngrDataRows);
+					}
+				})
+			} else {
+				document.getElementById("dashboardHeader").innerHTML = "No data to display for "+dateSelection;
+			}
+		}
+		getBuses(db);
+	</script>
+</body>
+</html>
