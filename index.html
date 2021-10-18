@@ -11,6 +11,11 @@
 <body>
 	<h1>Melbourne Transit Statistics Dashboard</h1>
 	
+	
+	<div id="totalBuses_div"></div>
+	<div id="totalPassengers_div"></div>
+	</br>
+	
 	<form method="GET" action="index.html">
 	  <label for="dateInput">Specify Date:</label>
 	  <input type="date" id="dateInput" name="dateInput">
@@ -18,7 +23,8 @@
 	</form>
 	
 	 <h2 id="dashboardHeader">Total Number of passengers</h2>
-	 <div id="totalPassengers_div"></div>
+	 <div id="totalPassengersToday_div"></div>
+	 <div id="totalBusesToday_div"></div>
 	 <div id="busPassengersChart_div"></div>
 	
 	<script type="module">
@@ -83,6 +89,9 @@
 			// Create reference to the date collection 
 			const busesCol = collection(db, "BusOperation/dates/"+dateSelection);
 			const busesSnapshot = await getDocs(busesCol);		// Get document snapshots of date collection
+			
+			const dataVisCol = collection(db, "DataVisualisation");
+			const dataVisSnapshot = await getDocs(dataVisCol);		
 
 			// To select the element class details
 			const dat = document.querySelector(".details");
@@ -95,6 +104,19 @@
 			var totalBuses = 0;
 			var avgPassengers = 0;
 			var totalPassengers = 0;
+			
+			dataVisSnapshot.forEach(async doc => {
+				if(doc.id == "TotalBusesCount"){
+					document.getElementById("totalBuses_div").innerHTML = doc.data().count + " buses have been run by the MT rail replacement service";
+					console.log("Total Buses " + doc.data().count)
+				} else if (doc.id == "TotalPassengers"){
+					document.getElementById("totalPassengers_div").innerHTML = doc.data().count + " Passengers have used the MT rail replacement service";
+					console.log("Total Passengers " + doc.data().count)
+				} else if (doc.id == "TotalRunningBusesForToday"){
+					document.getElementById("totalBusesToday_div").innerHTML = doc.data().count + " buses have run today";
+					console.log("Total Running Buses for Today " + doc.data().count)
+				}
+			})
 		
 			// For each bus in the buses snapshot
 			busesSnapshot.forEach(async doc => {
@@ -107,7 +129,8 @@
 			console.log(buses);
 			console.log("TOTAL BUSES: " + totalBuses);
 
-			var psngrDataRows = [['Name', 'AvgPassengers']];	
+			var avgPsngrDataRows = [['Name', 'AvgPassengers']];
+			var totalPsngrDataRows = [['Name', 'totalPassengers']];
 			
 			// EXAMPLE OF BEING ABLE TO ACCESS INDIVIDUAL BUSES FOR A SPECIFIC DATE AND ACCESS THE BUSES DATA
 			// Create reference to the arrival time collection in each bus document
@@ -131,14 +154,15 @@
 					
 					if(itemsProcessed == buses.length){
 						avgPassengers = Math.round(totalPassengersPerBus / busPassengerCountSnapshot.size);
-						psngrDataRows.push([id, avgPassengers])
+						avgPsngrDataRows.push([id, avgPassengers])
+						totalPsngrDataRows.push([id, totalPassengersPerBus])
 					
 						console.log("TOTAL PASSENGERS FOR "+id+": " + totalPassengersPerBus);
 						console.log("AVERAGE PASSENGERS PER BUS: " + avgPassengers);
 
-						document.getElementById("totalPassengers_div").innerHTML = totalPassengers + " Passengers have used Melbourne Transit";
+						document.getElementById("totalPassengersToday_div").innerHTML = totalPassengers + " Passengers have used Melbourne Transit today";
 						// Call createFunction in createCharts.js 
-						createCharts(dateSelection, psngrDataRows);
+						createCharts(dateSelection, avgPsngrDataRows, totalPsngrDataRows);
 					}
 				})
 			} else {
