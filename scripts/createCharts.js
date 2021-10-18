@@ -8,11 +8,11 @@ function createCharts(date, avgPsngrDataRows, totalPsngrDataRows) {
 			var bus_totalPassenger_data = google.visualization.arrayToDataTable(totalPsngrDataRows);
 
 			var busAvgPassengersChartOption = {'title':'Average Passengers per bus for '+date,
-                       'width': 2000,
+                       'width': 800,
                        'height':300,};
 
 			var busTotalPassengersChartOption = {'title':'Total Passengers per bus for '+date,
-                       'width':2000,
+                       'width':800,
                        'height':300,};						   
 					   
 					
