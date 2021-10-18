@@ -122,8 +122,9 @@
 					const busPassengerCountSnapshot = await getDocs(busArrivalRouteCol);		// Get document snapshots of ArrivalTime collection
 					
 					busPassengerCountSnapshot.forEach(async doc => {
-						totalPassengers += doc.data().count;
-						totalPassengersPerBus += doc.data().count;
+						console.log(doc.data().passengerCount)
+						totalPassengers += doc.data().passengerCount;
+						totalPassengersPerBus += doc.data().passengerCount;
 					})
 				
 					//totalPassengersPerBus = totalPassengers;
