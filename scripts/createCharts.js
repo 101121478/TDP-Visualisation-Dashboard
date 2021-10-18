@@ -1,20 +1,27 @@
 // Load the Visualization API and the corechart package.
 google.charts.load('current', {'packages':['corechart']});
 
-function createCharts(date, psngrDataRows) {
+function createCharts(date, avgPsngrDataRows, totalPsngrDataRows) {
 	
 	// Convert Chart data rows to Data tables 
-			var bus_passenger_data = google.visualization.arrayToDataTable(psngrDataRows);
+			var bus_avgPassenger_data = google.visualization.arrayToDataTable(avgPsngrDataRows);
+			var bus_totalPassenger_data = google.visualization.arrayToDataTable(totalPsngrDataRows);
 
-			var busPassengersChartOption = {'title':'Average Passengers per bus for '+date,
-                       'width':1200,
-                       'height':300,};		   
+			var busAvgPassengersChartOption = {'title':'Average Passengers per bus for '+date,
+                       'width': 2000,
+                       'height':300,};
+
+			var busTotalPassengersChartOption = {'title':'Total Passengers per bus for '+date,
+                       'width':2000,
+                       'height':300,};						   
 					   
 					
 			// Create the Bar Charts and put them in the specified Document elements		
-			var busPassengerChart = new google.visualization.BarChart(document.getElementById('busPassengersChart_div'));
+			var busAvgPassengerChart = new google.visualization.BarChart(document.getElementById('busAvgPassengersChart_div'));
+			var busTotalPassengerChart = new google.visualization.BarChart(document.getElementById('busTotalPassengersChart_div'));
 			
 			
 			// Draw the Bar Charts to the screen using the Data Tables and Options Specified
-			busPassengerChart.draw(bus_passenger_data, busPassengersChartOption);
+			busAvgPassengerChart.draw(bus_avgPassenger_data, busAvgPassengersChartOption);
+			busTotalPassengerChart.draw(bus_totalPassenger_data, busTotalPassengersChartOption);
 }
