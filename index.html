@@ -24,8 +24,7 @@
 	
 	 <h2 id="dashboardHeader">Total Number of passengers</h2>
 	 <div id="totalPassengersToday_div"></div>
-	 <div id="totalBusesToday_div"></div>
-	 
+	
 	 <div id="busAvgPassengersChart_div"></div>
 	 <div id="busTotalPassengersChart_div"></div>
 	
@@ -114,9 +113,6 @@
 				} else if (doc.id == "TotalPassengers"){
 					document.getElementById("totalPassengers_div").innerHTML = doc.data().count + " Passengers have used the MT rail replacement service";
 					console.log("Total Passengers " + doc.data().count)
-				} else if (doc.id == "TotalRunningBusesForToday"){
-					document.getElementById("totalBusesToday_div").innerHTML = doc.data().count + " buses have run today";
-					console.log("Total Running Buses for Today " + doc.data().count)
 				}
 			})
 		
