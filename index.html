@@ -130,7 +130,7 @@
 					//totalPassengersPerBus = totalPassengers;
 					
 					if(itemsProcessed == buses.length){
-						avgPassengers = Math.round(totalPassengersPerBus / totalBuses);
+						avgPassengers = Math.round(totalPassengersPerBus / busPassengerCountSnapshot.size);
 						psngrDataRows.push([id, avgPassengers])
 					
 						console.log("TOTAL PASSENGERS FOR "+id+": " + totalPassengersPerBus);
