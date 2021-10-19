@@ -5,171 +5,44 @@
     <!-- References to external style CSS file -->
     <title>Test Firestore & Chart Creation</title>
     <!--Load the AJAX API-->
-    <script
-      type="text/javascript"
-      src="https://www.gstatic.com/charts/loader.js"
-    ></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="scripts/createCharts.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/public/styles.css" rel="stylesheet" />
+    <link href="public/styles.css" rel="stylesheet" />
   </head>
 
   <body class="grid grid-cols-4 gap-3 font-sans bg-gray-100">
-    <h1
-      id="title"
-      class="
-        bg-white
-        col-span-4
-        row-span-1
-        text-4xl
-        uppercase
-        font-semibold
-        text-center
-        p-6
-      "
-    >
-      Melbourne Transit Statistics Dashboard
-    </h1>
+    <h1 id="title" class="bg-white col-span-4 row-span-1 text-4xl uppercase font-semibold text-center p-6">Melbourne Transit Statistics Dashboard</h1>
 
-    <div
-      id="aggregate-card"
-      class="
-        p-6
-        col-start-1 col-span-1
-        mx-2
-        flex flex-col
-        items-center
-        rounded-sm
-        overflow-hidden
-        shadow-lg
-        border border-gray-200
-        bg-white
-      "
-    >
+    <div id="aggregate-card" class="p-6 col-start-1 col-span-1 mx-2 flex flex-col items-center rounded-sm overflow-hidden shadow-lg border border-gray-200 bg-white">
       <div class="my-1 text-xl font-semibold">Aggregate Statistics</div>
       <div class="my-1" id="totalBuses_div"></div>
       <div class="my-1" id="totalPassengers_div"></div>
     </div>
 
-    <div
-      class="
-        col-span-1 col-start-2
-        row-start-2
-        p-6
-        flex flex-row
-        items-end
-        justify-start
-        rounded-sm
-        overflow-hidden
-        shadow-lg
-        border border-gray-200
-        bg-white
-      "
-      id="datepicker-card"
-    >
+    <div class="col-span-1 col-start-2 row-start-2 p-6 flex flex-row items-end justify-start rounded-sm overflow-hidden shadow-lg border border-gray-200 bg-white" id="datepicker-card">
       <form method="GET" action="index.html">
-        <label for="dateInput" class="font-bold mb-1 text-gray-700"
-          >Select Date:</label
-        >
-        <input
-          type="date"
-          id="dateInput"
-          name="dateInput"
-          class="
-            leading-none
-            rounded-lg
-            shadow-sm
-            focus:outline-none focus:shadow-outline
-            text-gray-700
-            font-medium
-            border-2
-          "
-        />
-        <input
-          class="
-            py-2
-            px-4
-            font-semibold
-            rounded-lg
-            shadow-md
-            text-white
-            bg-indigo-500
-            hover:bg-indigo-700
-          "
-          type="submit"
-        />
+        <label for="dateInput" class="font-bold mb-1 text-gray-700">Select Date:</label>
+        <input type="date" id="dateInput" name="dateInput" class="leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-700 font-medium border-2" />
+        <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-indigo-500 hover:bg-indigo-700" type="submit" />
       </form>
     </div>
 
-    <div
-      id="total-passengers-today"
-      class="
-        col-start-3
-        row-start-2
-        col-span-1
-        row-span-1
-        p-6
-        max-w-prose
-        flex flex-col
-        items-center
-        rounded-sm
-        overflow-hidden
-        shadow-lg
-        border border-gray-200
-        bg-white
-      "
-    >
-      <h2 class="text-xl font-semibold" id="dashboardHeader">
-        Total Number of Passengers Today
-      </h2>
+    <div id="total-passengers-today" class="col-start-3 row-start-2 col-span-1 row-span-1 p-6 max-w-prose flex flex-col items-center rounded-sm overflow-hidden shadow-lg border border-gray-200 bg-white">
+      <h2 class="text-xl font-semibold" id="dashboardHeader">Total Number of Passengers Today</h2>
 
       <div id="totalPassengersToday_div"></div>
     </div>
 
-    <div
-      class="
-        col-start-1
-        row-span-2
-        p-6
-        mx-auto
-        flex flex-col
-        items-center
-        rounded-sm
-        overflow-hidden
-        shadow-lg
-        border border-gray-200
-        bg-white
-      "
-      id="busAvgPassengersChart_div"
-    ></div>
+    <div class="col-start-1 row-span-2 p-6 mx-auto flex flex-col items-center rounded-sm overflow-hidden shadow-lg border border-gray-200 bg-white" id="busAvgPassengersChart_div"></div>
 
-    <div
-      class="
-        col-start-1
-        row-span-2
-        p-6
-        mx-auto
-        flex flex-col
-        items-center
-        rounded-sm
-        overflow-hidden
-        shadow-lg
-        border border-gray-200
-        bg-white
-      "
-      id="busTotalPassengersChart_div"
-    ></div>
+    <div class="col-start-1 row-span-2 p-6 mx-auto flex flex-col items-center rounded-sm overflow-hidden shadow-lg border border-gray-200 bg-white" id="busTotalPassengersChart_div"></div>
 
     <script type="module">
       // Import the functions you need from the SDKs you need
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-analytics.js";
-      import {
-        getFirestore,
-        collection,
-        collectionGroup,
-        getDocs,
-      } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js";
+      import { getFirestore, collection, collectionGroup, getDocs } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js";
       // TODO: Add SDKs for Firebase products that you want to use
       // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -240,14 +113,10 @@
 
         dataVisSnapshot.forEach(async (doc) => {
           if (doc.id == "TotalBusesCount") {
-            document.getElementById("totalBuses_div").innerHTML =
-              doc.data().count +
-              " buses have been run by the MT rail replacement service";
+            document.getElementById("totalBuses_div").innerHTML = doc.data().count + " buses have been run by the MT rail replacement service";
             console.log("Total Buses " + doc.data().count);
           } else if (doc.id == "TotalPassengers") {
-            document.getElementById("totalPassengers_div").innerHTML =
-              doc.data().count +
-              " Passengers have used the MT rail replacement service";
+            document.getElementById("totalPassengers_div").innerHTML = doc.data().count + " Passengers have used the MT rail replacement service";
             console.log("Total Passengers " + doc.data().count);
           }
         });
@@ -275,14 +144,7 @@
             var totalPassengersPerBus = 0;
             itemsProcessed++;
 
-            const busArrivalRouteCol = collection(
-              db,
-              "BusOperation/dates/" +
-                dateSelection +
-                "/" +
-                id +
-                "/PassengerCount"
-            );
+            const busArrivalRouteCol = collection(db, "BusOperation/dates/" + dateSelection + "/" + id + "/PassengerCount");
             const busPassengerCountSnapshot = await getDocs(busArrivalRouteCol); // Get document snapshots of ArrivalTime collection
 
             busPassengerCountSnapshot.forEach(async (doc) => {
@@ -294,27 +156,20 @@
             //totalPassengersPerBus = totalPassengers;
 
             if (itemsProcessed == buses.length) {
-              avgPassengers = Math.round(
-                totalPassengersPerBus / busPassengerCountSnapshot.size
-              );
+              avgPassengers = Math.round(totalPassengersPerBus / busPassengerCountSnapshot.size);
               avgPsngrDataRows.push([id, avgPassengers]);
               totalPsngrDataRows.push([id, totalPassengersPerBus]);
 
-              console.log(
-                "TOTAL PASSENGERS FOR " + id + ": " + totalPassengersPerBus
-              );
+              console.log("TOTAL PASSENGERS FOR " + id + ": " + totalPassengersPerBus);
               console.log("AVERAGE PASSENGERS PER BUS: " + avgPassengers);
 
-              document.getElementById("totalPassengersToday_div").innerHTML =
-                totalPassengers +
-                " Passengers have used Melbourne Transit today";
+              document.getElementById("totalPassengersToday_div").innerHTML = totalPassengers + " Passengers have used Melbourne Transit today";
               // Call createFunction in createCharts.js
               createCharts(dateSelection, avgPsngrDataRows, totalPsngrDataRows);
             }
           });
         } else {
-          document.getElementById("dashboardHeader").innerHTML =
-            "No data to display for " + dateSelection;
+          document.getElementById("dashboardHeader").innerHTML = "No data to display for " + dateSelection;
         }
       }
       getBuses(db);
