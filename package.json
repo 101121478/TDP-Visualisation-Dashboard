@@ -1,0 +1,24 @@
+{
+  "name": "tdp-visualisation-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-css": "tailwindcss build -i src/styles.css -o public/styles.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/101121478/TDP-Visualisation-Dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/101121478/TDP-Visualisation-Dashboard/issues"
+  },
+  "homepage": "https://github.com/101121478/TDP-Visualisation-Dashboard#readme",
+  "dependencies": {
+    "daisyui": "^1.14.6",
+    "tailwindcss": "^2.2.17"
+  }
+}
