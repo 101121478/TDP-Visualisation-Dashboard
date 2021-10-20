@@ -10,6 +10,8 @@ But in case that doesn't work, the usual way is first to install the basic versi
 
 ``npm install tailwindcss``
 
+The project also relies on DaisyUI, to install simply enter:
+``npm i daisyui``
 
 If you have made any changes to the css in index.html you will need to rebuild the purged Tailwind CSS file:
 
@@ -18,4 +20,3 @@ If you have made any changes to the css in index.html you will need to rebuild t
 You can see the result in /public. Tailwind removes all unused utility classes to minimise file size. 
 
 The VSCode extension Tailwind CSS Intellisense is useful if you want to edit the CSS. It provides autosuggestions of the utility classes when typing.
-
