@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <!-- References to external style CSS file -->
-        <title>Test Firestore & Chart Creation</title>
+        <title>MT Data Visualisation Dashboard</title>
         <!--Load the AJAX API-->
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script src="scripts/createCharts.js"></script>
@@ -39,6 +39,8 @@
         <!--Daily Statistics-->
         <div id="total-passengers-today" class="col-start-2 row-start-2 col-span-1 row-span-1 p-6 max-w-prose flex flex-col rounded-sm overflow-hidden shadow-lg card bordered">
             <h2 class="text-xl font-semibold stat-title" id="dashboardHeader">Daily Statistics</h2>
+			<div id="totalBusesToday_div" class="stat-value"></div>
+            <div id="totalBusesToday_description" class="stat-desc">buses</div>
             <div id="totalPassengersToday_div" class="stat-value"></div>
             <div id="totalPassengersToday_description" class="stat-desc">passengers</div>
         </div>
@@ -171,9 +173,9 @@
                             avgPsngrDataRows.push([id, avgPassengers]);
                             totalPsngrDataRows.push([id, totalPassengersPerBus]);
 
-                            console.log("TOTAL PASSENGERS FOR " + id + ": " + totalPassengersPerBus);
-                            console.log("AVERAGE PASSENGERS PER BUS: " + avgPassengers);
-
+                            console.log("BUSES: " + totalPsngrDataRows);
+							
+							document.getElementById("totalBusesToday_div").innerHTML = totalBuses;
                             document.getElementById("totalPassengersToday_div").innerHTML = totalPassengers;
                             // Call createFunction in createCharts.js
                             createCharts(dateSelection, avgPsngrDataRows, totalPsngrDataRows);
@@ -181,6 +183,8 @@
                     });
                 } else {
                     document.getElementById("dashboardHeader").innerHTML = "No data to display for " + dateSelection;
+					document.getElementById("totalBusesToday_description").innerHTML = "";
+					document.getElementById("totalPassengersToday_description").innerHTML = "";
                 }
             }
             getBuses(db);
