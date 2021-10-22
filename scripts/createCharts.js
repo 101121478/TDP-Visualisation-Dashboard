@@ -8,12 +8,12 @@ function createCharts(date, avgPsngrDataRows, totalPsngrDataRows) {
 			var bus_totalPassenger_data = google.visualization.arrayToDataTable(totalPsngrDataRows);
 
 			var busAvgPassengersChartOption = {'title':'Average Passengers per bus for '+date,
-                       'width': 800,
-                       'height':300,};
+                       'width': 1050,
+                       'height':600,};
 
 			var busTotalPassengersChartOption = {'title':'Total Passengers per bus for '+date,
-                       'width':800,
-                       'height':300,};						   
+                       'width':1050,
+                       'height':600,};						   
 					   
 					
 			// Create the Bar Charts and put them in the specified Document elements		
