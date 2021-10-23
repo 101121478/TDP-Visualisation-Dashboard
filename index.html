@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="wireframe">
+<html lang="en" data-theme="corporate">
     <head>
         <meta charset="utf-8" />
         <!-- References to external style CSS file -->
@@ -14,11 +14,11 @@
     <body class="grid grid-cols-4 gap-3 font-sans p-6">
 
         <!--Title-->
-        <h1 id="title" class="col-start-1 col-span-4 row-span-1 row-start-1 text-4xl uppercase font-semibold text-center p-6">Melbourne Transit Statistics Dashboard</h1>
+        <h1 id="title" class="col-start-1 col-span-4 row-span-1 row-start-1 text-4xl uppercase font-semibold text-center p-6 bg-gray-400">Melbourne Transit Statistics Dashboard</h1>
 
         <!--Yearly Statistics-->
-        <div id="aggregate-card" class="card bordered rounded-sm overflow-hidden shadow-lg col-span-1 row-start-2">
-            <div id="totals-stats" class="stat flex flex-col">
+        <div id="aggregate-card" class="card bordered rounded-sm overflow-hidden shadow-lg col-span-1 row-start-2 ">
+            <div id="totals-stats" class="stat flex flex-col ">
                 <div class="stat-title text-xl">Yearly Statistics</div>
                 <div class="stat-value" id="totalBuses_div"></div>
                 <div class="stat-desc" id="totalBuses_description">buses to date</div>
@@ -28,10 +28,10 @@
         </div>
 
         <!--Date Picker-->
-        <div class="col-span-1 col-start-3 row-start-2 p-6 items-end justify-start rounded-sm overflow-hidden shadow-lg card" id="datepicker-card">
-            <form method="GET" action="index.html" class="border-2 border-black flex flex-col">
-                <label for="dateInput" class="font-bold mb-1">Select Date:</label>
-                <input type="date" id="dateInput" name="dateInput" class="leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline font-medium border-2" />
+        <div class="col-span-1 col-start-3 row-start-2 p-6 rounded-sm overflow-hidden shadow-lg card" id="datepicker-card">
+            <form method="GET" action="index.html" class="flex flex-col">
+                <label for="dateInput" class="text-xl font-semibold stat-title justify-center">Select Date:</label>
+                <input type="date" id="dateInput" name="dateInput" class="leading-none rounded-lg shadow-sm my-4 focus:outline-none focus:shadow-outline font-medium border-2" />
                 <input class="btn btn-secondary" type="submit" />
             </form>
         </div>
