@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="wireframe">
+<html lang="en" data-theme="corporate">
     <head>
         <meta charset="utf-8" />
         <!-- References to external style CSS file -->
@@ -27,21 +27,26 @@
             </div>
         </div>
 
-        <!--Date Picker-->
-        <div class="col-span-1 col-start-3 row-start-2 p-6 items-end justify-start rounded-sm overflow-hidden shadow-lg card" id="datepicker-card">
-            <form method="GET" action="index.html" class="border-2 border-black flex flex-col">
-                <label for="dateInput" class="font-bold mb-1">Select Date:</label>
-                <input type="date" id="dateInput" name="dateInput" class="leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline font-medium border-2" />
-                <input class="btn btn-secondary" type="submit" />
-            </form>
+        <!--Daily Statistics-->
+        <div id="daily-stats" class="col-start-2 row-start-2 col-span-1 row-span-1 p-6 grid grid-cols-2 gap-x-3 rounded-sm overflow-hidden shadow-lg card bordered">
+
+            <!--Daily Passengers-->
+            <div id="total-passengers-today" class="col-start-1 col-span-1">
+                <h2 class="text-xl font-semibold stat-title" id="dashboardHeader">Daily Statistics</h2>
+                <div id="totalPassengersToday_div" class="stat-value"></div>
+                <div id="totalPassengersToday_description" class="stat-desc">passengers</div>
+            </div>
+
+            <!-- Date Picker -->
+            <div id="date" class=" col-start-2 col-span-1">
+                <form method="GET" action="index.html" class="flex flex-col col-start-2 row-span-1">
+                    <label for="dateInput" class="font-bold mb-1">Select Date:</label>
+                    <input type="date" id="dateInput" name="dateInput" class="leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline font-medium border-2" />
+                    <input class="btn btn-secondary" type="submit" />
+                </form>
+            </div>
         </div>
 
-        <!--Daily Statistics-->
-        <div id="total-passengers-today" class="col-start-2 row-start-2 col-span-1 row-span-1 p-6 max-w-prose flex flex-col rounded-sm overflow-hidden shadow-lg card bordered">
-            <h2 class="text-xl font-semibold stat-title" id="dashboardHeader">Daily Statistics</h2>
-            <div id="totalPassengersToday_div" class="stat-value"></div>
-            <div id="totalPassengersToday_description" class="stat-desc">passengers</div>
-        </div>
 
         <!-- Average Passengers Chart-->
         <div class="col-start-1 row-span-2 p-6 mx-auto flex flex-col items-center rounded-sm overflow-hidden shadow-lg border border-gray-200" id="busAvgPassengersChart_div"></div>
